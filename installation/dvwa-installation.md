@@ -74,3 +74,50 @@ Once the container is running, access DVWA using a web browser:
 
 At this point, the DVWA application is successfully installed and accessible locally.
 
+
+# Switching from DVWA Container to Local Installation
+
+And since the DVWA container is missing some labs, I had to switch to local web server installation.
+
+That's why I will switch to normal local installation to do those missed labs.
+
+So let's start by cloning the GitHub repo into `/var/www/html` and change its permission, so let's give full permissions to everyone on the DVWA folder and all its contents (since it's a local lab, that's okay).
+
+And then make a backup of `config.inc.php`:
+
+<img width="926" height="248" alt="Screenshot from 2026-02-10 18-22-09" src="https://github.com/user-attachments/assets/31f73a21-c8bc-41ee-8699-af94dfc6c4d0" />
+
+<img width="960" height="206" alt="Screenshot from 2026-02-10 18-24-21" src="https://github.com/user-attachments/assets/69e710a7-5c24-41bc-a1be-6db499589171" />
+
+
+And let's change the default credentials to something easy like: `admin:password`:
+
+<img width="656" height="109" alt="Screenshot from 2026-02-10 18-25-44" src="https://github.com/user-attachments/assets/dd88f564-c792-4a88-879d-9b9565183bea" />
+
+
+And let's add that user to MySQL DB with:
+```sql
+CREATE USER 'admin'@'127.0.0.1' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON dvwa.* TO 'admin'@'127.0.0.1';
+FLUSH PRIVILEGES;
+```
+
+Then install Apache and install PHP for it:
+```bash
+sudo apt install apache2
+sudo apt install php libapache2-mod-php php-mysql
+```
+
+Then change values of `allow_url_fopen` and `allow_url_include` inside `/etc/php/yourversion/apache2/php.ini`, both of them should be on.
+
+<img width="789" height="161" alt="Screenshot from 2026-02-10 18-50-04" src="https://github.com/user-attachments/assets/e592118f-8087-438e-b777-e8bebb3e0413" />
+
+The first one is for: Allows PHP functions to open remote URLs as files.
+
+And second one: Allows remote files to be included as PHP code.
+
+And just restart Apache2, and login to http://127.0.0.1/dvwa.
+
+And here we have the missed labs:
+
+<img width="179" height="106" alt="Screenshot from 2026-02-10 19-02-02" src="https://github.com/user-attachments/assets/b8842a87-1200-4051-a084-fd66e6906a6b" />
